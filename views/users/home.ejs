@@ -1,0 +1,107 @@
+<!--
+	Hunter Culler and Ian Anderson
+	University of Colorado Denver CSCI 4800 E01
+	Web Application Developement
+	Group Assignment 4
+
+	May 12th, 2021
+
+	Status = Functional
+-->
+
+<head>
+    <link rel="stylesheet" href="/css/assignment3.css">
+    
+</head>
+
+<body>
+    <div class="row d-flex justify-content-center">
+        <div class="column left">
+            <div class="card">
+                <div class="card-header usersHeader">Following</div>
+                <div class="card-body">
+                    <% users.forEach(user => { %>
+                        <% if ( currentUser.friends.indexOf( user._id ) > -1 ) { %>
+                        <p>
+                            <a href="<%=`/users/${user._id}/page`%>" class="user"><%= user.firstname %> <%= user.lastname %>: </a>
+                            <a href="<%=`/users/${user._id}/removeFriend`%>" class="unfollow">Unfollow</a>
+                        </p>
+                        <% } %>
+                    <% }) %>
+                </div>
+                <div class="card-header usersHeader">Unfollowed Users</div>
+                <div class="card-body">
+                    <% users.forEach(user => { %>
+                        <% if ( (currentUser.friends.indexOf( user._id ) <= -1) && ( user._id !== currentUser._id ) ) { %>
+                        <p>
+                            <a href="<%=`/users/${user._id}/page`%>" class="user" ><%= user.firstname %> <%= user.lastname %>: </a>
+                            <a href="<%=`/users/${user._id}/addFriend`%>" class="follow">Follow</a>
+                        </p>
+                        <% } %>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+        <div class="column middle">
+            <div class="feed">
+                <div class="card post">
+                    <div class="form-data card-body">
+                        <div class="row d-flex justify-content-center"></div>
+                        <form action="<%=`/posts/${currentUser._id}/create` %>" method="POST">
+                            <div row>
+                                <textarea style="resize: none;" class="form-control" type="text" name="caption" id="txtCaption" rows="1"
+                                    placeholder="type your thoughts here, the world is waiting!" autofocus required></textarea>
+                                <hr style="margin-top: 10px;">
+                                <div>
+                                    <button type="submit" class="btn btn-primary">Post</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <% posts.forEach(post=> { %>
+                    <!--  JS logic used to only display owned posts, follwed user's posts, and dynaically set button states -->
+                    <% if ( ( currentUser.friends.indexOf( post.posterId )> -1 ) || ( post.username == currentUser.username ) ) { %>
+                        <div class="card post">
+                            <div class="card-header post-header text-start">
+                                <img src="/images/avatar.png" alt="Avatar" class="avatar">
+                                <%=post.username %>
+                                    <% if (post.username==currentUser.username) { %>
+                                        <a href="<%= `/posts/${post.id}/delete?_method=DELETE` %>"
+                                            onclick="return confirm('Are you sure?')">Delete
+                                        </a>
+                                        <% } else if ( currentUser.friends.indexOf(post.posterId)> -1) { %>
+                                            <a href="<%= `/users/${post.posterId}/removeFriend` %>" onclick="">Unfollow</a>
+                                        <% } else { %>
+                                            <a href="<%= `/users/${post.posterId}/addFriend` %>" onclick="">Follow</a>
+                                        <% } %>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text post-text">
+                                    <%= post.caption %>
+                                </p>
+                                <div class="post-published">
+                                    Published: <%= post.createdAt %>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                <% }) %>
+        </div>
+        <div class="column right">
+            <div class="card">
+                <div class="card-header hashtagHeader">
+                    Trending Hashtags
+                </div>
+                <div class="card-body">
+                    <% hashtags.forEach(hashtag => { %>
+                        <p>
+                            #<%= hashtag.hashtag %>
+                        </p>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
