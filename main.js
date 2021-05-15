@@ -130,7 +130,8 @@ function(req, res) {
    res.redirect(`/home/${req.user._id}`);
 });
 
-//router.get("/users/:id/posts", usersController.showViewPosts);
+router.get("/users/:id/posts", usersController.showAllPosts, usersController.showViewPosts);
+router.get("/users/posts", usersController.showAllPostsNoSession, usersController.showViewPostsNoSession);
 
 router.get("/posts", postsController.index, postsController.indexView);
 router.get("/posts/new", postsController.new);
@@ -142,8 +143,8 @@ router.get("/users/:id/edit", usersController.edit, usersController.showEdit);
 router.put("/users/:id/update", usersController.update, usersController.redirectView);
 //router.put("/users/:id/userPage", usersController.showUserPage, usersController.showViewUserPage);
 
-router.get("/users/:id/addFriend", usersController.addFriend, usersController.showViewUserPage);
-router.get("/users/:id/removeFriend", usersController.removeFriend, usersController.showViewUserPage);
+router.get("/users/:id/addFriend", usersController.addFriend, usersController.showCurrUserPage, usersController.showViewUserPage);
+router.get("/users/:id/removeFriend", usersController.removeFriend, usersController.showCurrUserPage, usersController.showViewUserPage);
 router.get("/users/:id/home", usersController.showHome, usersController.showViewHome);
 
 //router.use(errorController.respondNoResourceFound);

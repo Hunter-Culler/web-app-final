@@ -200,13 +200,17 @@ module.exports = {
 
         req.check("password", "Password can not be empty.").notEmpty();
 
+        //make sure password matched the confrim password field
+        req.check("password", "confirm password field did not match up")
+        .equals(req.body.confirmPassword);
+
         //get result of validation
         req.getValidationResult().then((error) => {
             if (!error.isEmpty()) {
                 let messages = error.array().map(e => e.msg);
                 req.flash("error", messages.join(" and "));
                 req.skip = true;
-                res.local.redirect = "/signup";
+                res.locals.redirect = "/signup";
                 next();
             }
             else
@@ -277,11 +281,25 @@ module.exports = {
 
     //----------------------------------------------------------------------------------------------//
     showUserPage: (req, res, next) => {
-        console.log(res.locals.currentUser);
         let userId = req.params.id;
         User.findById(userId)
             .then(user => {
-                res.locals.user = user;
+                res.locals.pageUser = user;
+                next();
+            })
+            .catch(error => {
+                req.flash("error", `Failed to show user page because 
+                of the follwoing errors: ${error.message}`);
+                console.log(`(showUserPage) Error fetching user by ID: ${error.message}`);
+            })
+    },
+
+    //----------------------------------------------------------------------------------------------//
+    showCurrUserPage: (req, res, next) => {
+        let userId = res.locals.currentUser.id;
+        User.findById(userId)
+            .then(user => {
+                res.locals.pageUser = user;
                 next();
             })
             .catch(error => {
@@ -347,7 +365,7 @@ module.exports = {
     },
 
     //----------------------------------------------------------------------------------------------//
-    showPosts: (req, res, next) => {
+    showAllPosts: (req, res, next) => {
         let userId = req.params.id;
         console.log("In show posts");
 
@@ -358,9 +376,9 @@ module.exports = {
             .then(user => {
                 res.locals.currentUser = user;
 
-                var queryID = { posterID: userId };
+                //var queryID = { posterID: userId };
 
-                Post.find(queryID)
+                Post.find()
                     .then(posts => {
                         console.log(posts);
                         res.locals.posts = posts;
@@ -375,6 +393,24 @@ module.exports = {
             })
             .catch(error => {
                 console.log(`(showPosts) Error fetching post by ID: ${error.message}`);
+                next(error);
+            })
+    },
+
+
+    //----------------------------------------------------------------------------------------------//
+    showAllPostsNoSession: (req, res, next) => {
+        console.log("In show posts");
+        Post.find()
+            .then(posts => {
+                console.log(posts);
+                res.locals.posts = posts;
+                next();
+            })
+            .catch(error => {
+                req.flash("error", `Failed to fetch post data because 
+                        of the follwoing errors: ${error.message}`);
+                console.log(`Error fetching post data: ${error.message}`);
                 next(error);
             })
     },
@@ -424,8 +460,13 @@ module.exports = {
     },
 
     //----------------------------------------------------------------------------------------------//
+    showViewPostsNoSession: (req, res) => {
+        console.log("rendering posts page");
+        res.render("users/postsNoSession");
+    },
+
+    //----------------------------------------------------------------------------------------------//
     addFriend: (req, res, next) => {
-        console.log()
         let currUser = res.locals.currentUser;
         let userId = req.params.id;
         User.findById(userId)
