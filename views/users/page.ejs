@@ -23,13 +23,13 @@
         <div class="row justify-content-center">
             <div class="col-12 text-center">
                 <span class="profileName">
-                    <%= currentUser.firstname %>
-                        <%= currentUser.lastname %>
+                    <%= user.firstname %>
+                        <%= user.lastname %>
                 </span>
             </div>
         </div>
         <div class="row justify-content-center pt-2 pb-4">
-            <a href="<%= `/users/${currentUser._id}/home` %>" type="button" class="col-2 btn btn-primary">Homepage</a>
+            <a href="<%= `/users/${user._id}/home` %>" type="button" class="col-2 btn btn-primary">Homepage</a>
         </div>
     </div>
     <div class="container-fluid profileInfo">
@@ -44,7 +44,7 @@
                     Birthday:
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6 d-flex justify-content-center">
-                    <%= currentUser.dob %>
+                    <%= user.dob %>
                 </div>
             </div>
         </div>
@@ -57,12 +57,12 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-6 d-flex justify-content-center">
                     <div class="col">
                         <p>
-                            <%= currentUser.address.city %>,
+                            <%= user.address.city %>,
                         </p>
                     </div>
                     <div class="col">
                         <p>
-                            <%= currentUser.address.state %>
+                            <%= user.address.state %>
                         </p>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
         <div class="card">
             <div class="col">
                 <div class="text-center border-bottom">
-                    Friend count: <%= currentUser.friends.length %>
+                    Friend count: <%= user.friends.length %>
                 </div>
             </div>
         </div>

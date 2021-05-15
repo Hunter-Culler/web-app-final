@@ -42,11 +42,11 @@
                             <div class="nav-item active">
                                 <a class="nav-link navButton" href="<%= `/users/${currentUser._id}/page` %>" >Profile</a>
                             </div>
-                            <!--
+
                             <div class="nav-item active">
                                 <a class="nav-link navButton" href="<%= `/users/${currentUser._id}/posts` %>" >Posts</a>
                             </div>
-                            -->
+
                             <div class="nav-item active navButton">
                                 <a href="<%= `/users/${currentUser._id}/edit` %>" class="nav-link navButton" >Edit Account</a>
                             </div>
@@ -75,8 +75,10 @@
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="/script.js"></script>
         <footer class="mt-auto">
-            <p><a href="/contact" class="text-primary">Contact Us</a></p>
+            <div class="card">
+                <p><a href="/contact" class="text-primary">Contact Us</a></p>
 			Copyright @2021 Ian Anderson and Hunter Culler
+            </div>
         </footer>
     </body>
 </html>
