@@ -277,6 +277,7 @@ module.exports = {
 
     //----------------------------------------------------------------------------------------------//
     showUserPage: (req, res, next) => {
+        console.log(res.locals.currentUser);
         let userId = req.params.id;
         User.findById(userId)
             .then(user => {
